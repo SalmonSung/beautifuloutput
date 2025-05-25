@@ -1,0 +1,1 @@
+from .core import force_structure_output
