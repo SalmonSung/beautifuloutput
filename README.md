@@ -28,6 +28,7 @@ Using LangChain (for reference)
 from langchain.chat_models import init_chat_model
 
 llm = init_chat_model("gpt-4.1-mini")
+llm = llm.with_structure_output(ResponseFormat)
 output = llm.invoke(["You are a helpful assistant", "who is the president of Korea?"])
 ```
 
