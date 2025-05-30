@@ -10,7 +10,7 @@ def force_structure_output(
     messages: List[Union[str, HumanMessage, SystemMessage]],
     response_format: type[BaseModel],
     format_type: Literal["pydantic"] = "pydantic"
-) -> BaseMessage:
+) -> BaseModel:
     """
     Augments the last message in a message sequence with a prompt instructing the LLM
     to output its answer in a specified (e.g., Pydantic) format, then invokes the LLM.
@@ -23,7 +23,7 @@ def force_structure_output(
         format_type (Literal["pydantic"], optional): The type of format instructions to append. Default is "pydantic".
 
     Returns:
-        BaseMessage: The response from the language model, structured per the appended format instructions.
+        BaseModel: The response from the language model, should be a pydantic object of the given class.
     """
     format_dict = retrieve_pydantic(response_format)
     format_string = pydantic2prompt(format_dict)
@@ -39,8 +39,9 @@ def force_structure_output(
     else:
         raise ValueError(f"Unsupported message type: {type(last_message)}")
 
-
-    return llm.invoke(messages)
+    output = llm.invoke(messages)
+    item = parse_tagged_string_to_pydantic(output.content, response_format)
+    return item
 
 
 
