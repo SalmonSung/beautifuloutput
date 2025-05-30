@@ -35,9 +35,9 @@ def retrieve_pydantic(model_cls: type[BaseModel]) -> Dict[str, FieldInfo]:
     return str_dict
 
 def pydantic2tag(item: dict) -> str:
-    final_str = "Answer Format:\n"
+    final_str = "\n###Answer Format:\n"
     for key, _ in item.items():
-        final_str += f"<{key}><\\{key}>\n"
+        final_str += f"<{key}></{key}>\n"
     return final_str
 
 def pydantic2prompt(item: dict) -> str:
@@ -46,6 +46,7 @@ def pydantic2prompt(item: dict) -> str:
     for key, value in item.items():
         final_str += f"\nField name: {key}"
         final_str += f"\nField description: {value}"
+        final_str += "\n"
     final_str += pydantic2tag(item)
     return final_str
 

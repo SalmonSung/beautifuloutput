@@ -5,11 +5,12 @@ from pydantic import BaseModel
 from typing import Literal, List, Union
 from beautifuloutput.utils import *
 
+
 def force_structure_output(
-    llm: BaseChatModel,
-    messages: List[Union[str, HumanMessage, SystemMessage]],
-    response_format: type[BaseModel],
-    format_type: Literal["pydantic"] = "pydantic"
+        llm: BaseChatModel,
+        messages: List[Union[str, HumanMessage, SystemMessage]],
+        response_format: type[BaseModel],
+        format_type: Literal["pydantic"] = "pydantic"
 ) -> BaseModel:
     """
     Augments the last message in a message sequence with a prompt instructing the LLM
@@ -40,8 +41,7 @@ def force_structure_output(
         raise ValueError(f"Unsupported message type: {type(last_message)}")
 
     output = llm.invoke(messages)
+
     item = parse_tagged_string_to_pydantic(output.content, response_format)
+
     return item
-
-
-
